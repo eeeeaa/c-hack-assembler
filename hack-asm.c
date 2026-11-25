@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "utils/helper.h"
 #include "utils/table.h"
@@ -7,6 +8,32 @@
 
 
 // Extract tokens
+void extract_tokens(char *s, char *tokens[3]) {
+    if(s[0] == A_SYMBOL) {
+        //@value = [@, value]
+        tokens[0] = "@";
+        tokens[1] = s + 1;
+        return;
+    }
+
+    //dest=comp;jump --> [dest,comp,jump]
+    tokens[0] = "null";
+    tokens[1] = s;
+    tokens[2] = "null";
+
+    char *semi = strchr(s, ';');
+    if(semi) {
+        *semi = '\0';
+        tokens[2] = semi + 1;
+    }
+
+    char *eq = strchr(s, '=');
+    if(eq) {
+        *eq = '\0';
+        tokens[0] = s;
+        tokens[1] = eq + 1;
+    }
+}
 
 // Translation
 void initialize() {}
@@ -36,6 +63,12 @@ int main(int argc, char *argv[])
             strip_spaces(line);
             //printf("%s\n", line);
             // Extract tokens
+            char *tokens[3] = {NULL, NULL, NULL};
+            extract_tokens(line, tokens);
+
+            for(int i = 0; i < 3; i++) {
+                printf("[%s]", tokens[i]);
+            }
             // Initialize - initialize table and pre-defined symbol
             // First pass - find all labels
             // Second pass - find all variables and translate to binary file

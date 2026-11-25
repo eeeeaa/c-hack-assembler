@@ -1,3 +1,4 @@
+// dynamic table
 // From https://www.geeksforgeeks.org/dsa/implementation-on-map-or-dictionary-data-structure-in-c/
 #include "table.h"
 #include <string.h>

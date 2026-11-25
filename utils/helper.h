@@ -3,7 +3,7 @@
 
 #define C_HEAD "011"
 #define A_HEAD "111"
-#define A_SYMBOL "@"
+#define A_SYMBOL '@'
 
 typedef struct {
     const char *key;
