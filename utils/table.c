@@ -1,6 +1,7 @@
 // From https://www.geeksforgeeks.org/dsa/implementation-on-map-or-dictionary-data-structure-in-c/
-#include <string.h>
 #include "table.h"
+#include <string.h>
+
 int size = 0; // Current number of elements in the map
 char keys[MAX_SIZE][100]; // Array to store the keys
 int values[MAX_SIZE]; // Array to store the values
