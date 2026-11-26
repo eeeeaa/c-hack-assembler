@@ -13,6 +13,7 @@ typedef struct {
 extern DictItem COMP_TABLE[28];
 extern DictItem DEST_TABLE[8];
 extern DictItem JUMP_TABLE[8];
+extern DictItem DEFINED_SYMBOL[23];
 
 void strip_spaces(char *s);
 
