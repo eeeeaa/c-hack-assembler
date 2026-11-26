@@ -22,7 +22,7 @@ extern DictItem DEST_TABLE[8];
 extern DictItem JUMP_TABLE[8];
 extern DictItem DEFINED_SYMBOL[23];
 
-void strip_spaces(char *s);
+void strip_spaces_and_comments(char *s);
 void extract_tokens(char *s, char *tokens[3]);
 char *to_binary_string(int n, int bit);
 

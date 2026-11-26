@@ -2,15 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-void strip_spaces(char *s)
+void strip_spaces_and_comments(char *s)
 {
+    // skip comments
+    char *comment = strstr(s, "//");
+    if (comment)
+    {
+        *comment = '\0';
+    }
+
     // 2 pointers - d and s
     // pointer to string
     char *d = s;
     do
     {
         // skim through strings
-        while (*d == ' ' || *d == '\n')
+        while (*d == ' ' || *d == '\n' || *d == '\r' || *d == '\t')
         {
             // skip empty space
             ++d;

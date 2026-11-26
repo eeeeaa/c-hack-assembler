@@ -30,7 +30,7 @@ void first_pass(FILE *file)
         // only care about non-blank line
         if (line[0] != '\n')
         {
-            strip_spaces(line);
+            strip_spaces_and_comments(line);
 
             // Extract tokens
             char *tokens[3] = {NULL, NULL, NULL};
@@ -69,10 +69,10 @@ void second_pass(FILE *file)
 
     while (fgets(line, sizeof(line), file))
     {
-        // only care about non-blank line
-        if (line[0] != '\n')
+        // only care about non-blank, non-comment line
+        if (line[0] != '\n' && line[0] != '/')
         {
-            strip_spaces(line);
+            strip_spaces_and_comments(line);
 
             // Extract tokens
             char *tokens[3] = {NULL, NULL, NULL};
