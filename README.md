@@ -5,6 +5,31 @@
 - Phase 2: Develop symbol handling
 - Phase 3: integrate both systems, build a general Hack assembler
 
+## Testing
+Each test is a pair of files in `tests/`:
+
+- `<name>.asm` — a Hack assembly program
+- `<name>.hack` — the expected binary output, one 16-bit instruction per line
+
+Run every test (builds the assembler first):
+
+```sh
+./tests/run-tests.sh
+```
+
+Other forms:
+
+```sh
+make test                    # same thing via make
+./tests/run-tests.sh label   # only tests whose name contains "label"
+./tests/run-tests.sh --no-build
+```
+
+The runner executes the assembler from the repository root (the assembler writes
+to `output/out.hack`), diffs that file against `<name>.hack`, and exits non-zero
+if any test fails. To add a test, add `<name>.asm` and its expected
+`<name>.hack`; no script changes are needed.
+
 ## Pseudocode
 input: hack asm file (.asm)
 output: hack machine code binary file (.hack)

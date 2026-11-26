@@ -23,18 +23,25 @@ void strip_spaces(char *s)
 
 char *to_binary_string(int n, int bit)
 {
-    int num_bits = sizeof(int) * bit;
-    char *string = malloc(num_bits + 1);
+    if (bit <= 0)
+    {
+        return NULL;
+    }
+
+    char *string = malloc(bit + 1);
     if (!string)
     {
         return NULL;
     }
-    for (int i = num_bits - 1; i >= 0; i--)
+
+    unsigned int u = (unsigned int)n;
+    for (int i = bit - 1; i >= 0; i--)
     {
-        string[i] = (n & 1) + '0';
-        n >>= 1;
+        string[i] = (u & 1) + '0';
+        u >>= 1;
     }
-    string[num_bits] = '\0';
+
+    string[bit] = '\0';
     return string;
 }
 

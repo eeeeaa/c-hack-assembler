@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "utils/helper.h"
 #include "utils/table.h"
 
@@ -46,16 +48,24 @@ void first_pass(FILE *file)
             }
         }
     }
+
+    rewind(file);
 }
 
 // scan the entire code
 // add variable to table
 // substitute label and variable via representation
 // translate to binary
+// A-instruction - @ -  0, value - 15 bit
+// C-instruction - 111 - comp 7 bit - dest 3 bit - jump 3 bit
 void second_pass(FILE *file)
 {
+    FILE *output;
+    output = fopen("output/out.hack", "w");
+
     // line buffer
     char line[24];
+    int sym_mem_count = SYM_START;
 
     while (fgets(line, sizeof(line), file))
     {
@@ -69,8 +79,53 @@ void second_pass(FILE *file)
             extract_tokens(line, tokens);
 
             // TODO
+            if (tokens[1] == NULL && tokens[2] == NULL)
+            {
+                // skip
+                continue;
+            }
+            else
+            {
+                if (tokens[0] != NULL && tokens[0][0] == A_SYMBOL && tokens[0][1] == '\0')
+                {
+                    // A - instruction
+                    int value;
+                    char *endptr;
+                    long parsed = strtol(tokens[1], &endptr, 10);
+
+                    if (tokens[1][0] != '\0' && *endptr == '\0')
+                    {
+                        // It's a valid integer
+                        value = (int)parsed;
+                    }
+                    else if (t_get(tokens[1]) != NULL)
+                    {
+                        // Existing variable symbol
+                        value = atoi(t_get(tokens[1]));
+                    }
+                    else
+                    {
+                        // New variable symbol
+                        char buf[16];
+                        snprintf(buf, sizeof(buf), "%d", sym_mem_count);
+                        t_insert(tokens[1], buf);
+                        value = sym_mem_count++;
+                    }
+
+                    char *b = to_binary_string(value, 15);
+                    fprintf(output, "%s%s\n", A_HEAD, b);
+                    free(b);
+                }
+                else
+                {
+                    // C - instruction
+                }
+            }
         }
     }
+
+    fclose(output);
+    rewind(file);
 }
 
 // Main program
@@ -90,10 +145,8 @@ int main(int argc, char *argv[])
 
     initialize();
     first_pass(file);
-    t_print();
-    // second_pass(file);
-
-    // TODO create binary file
+    //t_print();
+    second_pass(file);
 
     fclose(file);
     return 0;

@@ -1,9 +1,10 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#define C_HEAD "011"
-#define A_HEAD "111"
+#define C_HEAD "111"
+#define A_HEAD "0"
 #define A_SYMBOL '@'
+#define SYM_START 16
 
 #define COMP_LEN sizeof(COMP_TABLE) / sizeof(COMP_TABLE[0])
 #define DEST_LEN sizeof(DEST_TABLE) / sizeof(DEST_TABLE[0])
