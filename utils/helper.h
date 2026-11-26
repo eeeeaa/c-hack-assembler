@@ -25,5 +25,6 @@ extern DictItem DEFINED_SYMBOL[23];
 void strip_spaces_and_comments(char *s);
 void extract_tokens(char *s, char *tokens[3]);
 char *to_binary_string(int n, int bit);
+const char* c_lookup(const char *s, int table);
 
 #endif

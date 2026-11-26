@@ -96,6 +96,43 @@ void extract_tokens(char *s, char *tokens[3])
     }
 }
 
+const char* c_lookup(const char *s, int table) {
+    // table = 0 -> comp
+    // table = 1 -> dest
+    // table = 2 -> jump
+
+    switch (table) {
+        case 0: 
+            for(unsigned long i = 0; i < COMP_LEN; i++) {
+                if(strcmp(s, COMP_TABLE[i].key) == 0) {
+                    return COMP_TABLE[i].value;
+                }
+            }
+            break;
+        case 1: 
+            if(s == NULL) {
+                return DEST_TABLE[0].value;
+            }
+            for(unsigned long i = 0; i < DEST_LEN; i++) {
+                if(strcmp(s, DEST_TABLE[i].key) == 0) {
+                    return DEST_TABLE[i].value;
+                }
+            }
+            break;
+        case 2:
+            if(s == NULL){
+                return JUMP_TABLE[0].value;
+            }
+            for(unsigned long i = 0; i < JUMP_LEN; i++) {
+                if(strcmp(s, JUMP_TABLE[i].key) == 0) {
+                    return JUMP_TABLE[i].value;
+                }
+            }
+            break;
+    }
+    return NULL;
+}
+
 // define comp table
 // a = 0 and a = 1 --> 7 bits
 DictItem COMP_TABLE[28] = {

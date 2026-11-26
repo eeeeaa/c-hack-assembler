@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include "utils/helper.h"
 #include "utils/table.h"
@@ -22,7 +21,7 @@ void initialize()
 void first_pass(FILE *file)
 {
     // line buffer
-    char line[24];
+    char line[256];
     int count = 0;
 
     while (fgets(line, sizeof(line), file))
@@ -39,7 +38,7 @@ void first_pass(FILE *file)
             if (tokens[1] == NULL && tokens[2] == NULL)
             {
                 char str[100];
-                snprintf(str, sizeof(str), "%d", count + 1);
+                snprintf(str, sizeof(str), "%d", count);
                 t_insert(tokens[0], str);
             }
             else
@@ -64,7 +63,7 @@ void second_pass(FILE *file)
     output = fopen("output/out.hack", "w");
 
     // line buffer
-    char line[24];
+    char line[256];
     int sym_mem_count = SYM_START;
 
     while (fgets(line, sizeof(line), file))
@@ -78,7 +77,6 @@ void second_pass(FILE *file)
             char *tokens[3] = {NULL, NULL, NULL};
             extract_tokens(line, tokens);
 
-            // TODO
             if (tokens[1] == NULL && tokens[2] == NULL)
             {
                 // skip
@@ -119,6 +117,19 @@ void second_pass(FILE *file)
                 else
                 {
                     // C - instruction
+                    char *dest = tokens[0];
+                    char *comp = tokens[1];
+                    char *jump = tokens[2];
+
+                    const char *dv;
+                    const char *cv;
+                    const char *jv;
+
+                    dv = c_lookup(dest, 1);
+                    cv = c_lookup(comp, 0);
+                    jv = c_lookup(jump, 2);
+                    
+                    fprintf(output, "%s%s%s%s\n", C_HEAD, cv,dv,jv);
                 }
             }
         }
