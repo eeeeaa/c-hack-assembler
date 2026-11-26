@@ -9,12 +9,23 @@
 
 // Extract tokens
 void extract_tokens(char *s, char *tokens[3]) {
-    if(s[0] == A_SYMBOL) {
+   size_t len = strlen(s);
+    // (XXX) -> [XXX, NULL, NULL]
+    if (len >= 2 && s[0] == '(' && s[len - 1] == ')') {
+        //strip last char
+        s[len - 1] = '\0';
+        tokens[0] = s + 1;
+        tokens[1] = NULL;
+        tokens[2] = NULL;
+        return;
+    }
+
+     if(s[0] == A_SYMBOL) {
         //@value = [@, value]
         tokens[0] = "@";
         tokens[1] = s + 1;
         return;
-    }
+     }
 
     //dest=comp;jump --> [dest,comp,jump]
     tokens[0] = "null";
@@ -36,8 +47,23 @@ void extract_tokens(char *s, char *tokens[3]) {
 }
 
 // Translation
-void initialize() {}
+void initialize() {
+    // populate pre-defined symbols
+    for(unsigned long i = 0; i < DSYM_LEN;i++) {
+        t_insert(
+            DEFINED_SYMBOL[i].key,
+            DEFINED_SYMBOL[i].value
+        );
+    }
+}
+
+// scan the entire code and insert label to table
 void first_pass() {}
+
+// scan the entire code
+// add variable to table
+// substitute label and variable via representation
+// translate to binary
 void second_pass() {}
 
 // Main program

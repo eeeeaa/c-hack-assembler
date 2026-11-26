@@ -5,6 +5,11 @@
 #define A_HEAD "111"
 #define A_SYMBOL '@'
 
+#define COMP_LEN sizeof(COMP_TABLE) / sizeof(COMP_TABLE[0])
+#define DEST_LEN sizeof(DEST_TABLE) / sizeof(DEST_TABLE[0])
+#define JUMP_LEN sizeof(JUMP_TABLE) / sizeof(JUMP_TABLE[0])
+#define DSYM_LEN sizeof(DEFINED_SYMBOL) / sizeof(DEFINED_SYMBOL[0])
+
 typedef struct {
     const char *key;
     const char *value;

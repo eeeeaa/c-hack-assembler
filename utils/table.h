@@ -1,14 +1,15 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#define MAX_SIZE 1000
+#define T_MAX_SIZE 1000 // Maximum number of key-value pairs
+#define T_MAX_LEN 100   // Maximum length of a key or value (including '\0')
 
-extern int size;
-extern char keys[MAX_SIZE][100];
-extern int values[MAX_SIZE];
+extern int t_size;
+extern char t_keys[T_MAX_SIZE][T_MAX_LEN];
+extern char t_values[T_MAX_SIZE][T_MAX_LEN];
 
-int getIndex(char key[]);
-void insert(char key[], int value);
-int get(char key[]);
+int t_getIndex(const char *key);
+int t_insert(const char *key, const char *value);
+const char *t_get(const char *key);
 
 #endif
