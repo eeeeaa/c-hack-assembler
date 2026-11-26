@@ -1,0 +1,12 @@
+@counter
+M=1
+@sum
+M=0
+@counter
+D=M
+@sum
+M=D+M
+@sum
+D=M
+@R2
+M=D

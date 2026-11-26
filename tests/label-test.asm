@@ -1,0 +1,14 @@
+@0
+D=M
+@SKIP
+D;JEQ
+@1
+D=A
+M=D
+(SKIP)
+@2
+D=A
+M=D
+(END)
+@END
+0;JMP

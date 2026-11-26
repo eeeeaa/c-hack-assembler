@@ -1,0 +1,7 @@
+A=D
+M=D
+D=D
+MD=D
+AM=D
+AD=D
+AMD=D
