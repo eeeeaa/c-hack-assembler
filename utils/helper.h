@@ -10,7 +10,8 @@
 #define JUMP_LEN sizeof(JUMP_TABLE) / sizeof(JUMP_TABLE[0])
 #define DSYM_LEN sizeof(DEFINED_SYMBOL) / sizeof(DEFINED_SYMBOL[0])
 
-typedef struct {
+typedef struct
+{
     const char *key;
     const char *value;
 } DictItem;
@@ -21,5 +22,7 @@ extern DictItem JUMP_TABLE[8];
 extern DictItem DEFINED_SYMBOL[23];
 
 void strip_spaces(char *s);
+void extract_tokens(char *s, char *tokens[3]);
+char *to_binary_string(int n, int bit);
 
 #endif

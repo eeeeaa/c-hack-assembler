@@ -11,5 +11,6 @@ extern char t_values[T_MAX_SIZE][T_MAX_LEN];
 int t_getIndex(const char *key);
 int t_insert(const char *key, const char *value);
 const char *t_get(const char *key);
+void t_print(void);
 
 #endif
