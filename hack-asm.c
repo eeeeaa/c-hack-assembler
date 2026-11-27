@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "utils/helper.h"
 #include "utils/table.h"
 
@@ -26,25 +27,27 @@ void first_pass(FILE *file)
 
     while (fgets(line, sizeof(line), file))
     {
-        // only care about non-blank line
-        if (line[0] != '\n')
+        strip_spaces_and_comments(line);
+
+        if (line[0] == '\0' || strlen(line) == 0)
         {
-            strip_spaces_and_comments(line);
+            // skip blank line and comments
+            continue;
+        }
 
-            // Extract tokens
-            char *tokens[3] = {NULL, NULL, NULL};
-            extract_tokens(line, tokens);
+        // Extract tokens
+        char *tokens[3] = {NULL, NULL, NULL};
+        extract_tokens(line, tokens);
 
-            if (tokens[1] == NULL && tokens[2] == NULL)
-            {
-                char str[100];
-                snprintf(str, sizeof(str), "%d", count);
-                t_insert(tokens[0], str);
-            }
-            else
-            {
-                count++;
-            }
+        if (tokens[1] == NULL && tokens[2] == NULL)
+        {
+            char str[100];
+            snprintf(str, sizeof(str), "%d", count);
+            t_insert(tokens[0], str);
+        }
+        else
+        {
+            count++;
         }
     }
 
@@ -68,69 +71,67 @@ void second_pass(FILE *file)
 
     while (fgets(line, sizeof(line), file))
     {
-        // only care about non-blank, non-comment line
-        if (line[0] != '\n' && line[0] != '/')
+        strip_spaces_and_comments(line);
+
+        if (line[0] == '\0' || strlen(line) == 0)
         {
-            strip_spaces_and_comments(line);
+            // skip blank and comment line
+            continue;
+        }
 
-            // Extract tokens
-            char *tokens[3] = {NULL, NULL, NULL};
-            extract_tokens(line, tokens);
+        // Extract tokens
+        char *tokens[3] = {NULL, NULL, NULL};
+        extract_tokens(line, tokens);
 
-            if (tokens[1] == NULL && tokens[2] == NULL)
+        if (tokens[1] == NULL && tokens[2] == NULL)
+        {
+            // skip
+            continue;
+        }
+        else
+        {
+            if (tokens[0] != NULL && tokens[0][0] == A_SYMBOL && tokens[0][1] == '\0')
             {
-                // skip
-                continue;
-            }
-            else
-            {
-                if (tokens[0] != NULL && tokens[0][0] == A_SYMBOL && tokens[0][1] == '\0')
+                // A - instruction
+                int value;
+                char *endptr;
+                long parsed = strtol(tokens[1], &endptr, 10);
+
+                if (tokens[1][0] != '\0' && *endptr == '\0')
                 {
-                    // A - instruction
-                    int value;
-                    char *endptr;
-                    long parsed = strtol(tokens[1], &endptr, 10);
-
-                    if (tokens[1][0] != '\0' && *endptr == '\0')
-                    {
-                        // It's a valid integer
-                        value = (int)parsed;
-                    }
-                    else if (t_get(tokens[1]) != NULL)
-                    {
-                        // Existing variable symbol
-                        value = atoi(t_get(tokens[1]));
-                    }
-                    else
-                    {
-                        // New variable symbol
-                        char buf[16];
-                        snprintf(buf, sizeof(buf), "%d", sym_mem_count);
-                        t_insert(tokens[1], buf);
-                        value = sym_mem_count++;
-                    }
-
-                    char *b = to_binary_string(value, 15);
-                    fprintf(output, "%s%s\n", A_HEAD, b);
-                    free(b);
+                    // It's a valid integer
+                    value = (int)parsed;
+                }
+                else if (t_get(tokens[1]) != NULL)
+                {
+                    // Existing variable symbol
+                    value = atoi(t_get(tokens[1]));
                 }
                 else
                 {
-                    // C - instruction
-                    char *dest = tokens[0];
-                    char *comp = tokens[1];
-                    char *jump = tokens[2];
-
-                    const char *dv;
-                    const char *cv;
-                    const char *jv;
-
-                    dv = c_lookup(dest, 1);
-                    cv = c_lookup(comp, 0);
-                    jv = c_lookup(jump, 2);
-                    
-                    fprintf(output, "%s%s%s%s\n", C_HEAD, cv,dv,jv);
+                    // New variable symbol
+                    char buf[16];
+                    snprintf(buf, sizeof(buf), "%d", sym_mem_count);
+                    t_insert(tokens[1], buf);
+                    value = sym_mem_count++;
                 }
+
+                char *b = to_binary_string(value, 15);
+                fprintf(output, "%s%s\n", A_HEAD, b);
+                free(b);
+            }
+            else
+            {
+                // C - instruction
+                char *dest = tokens[0];
+                char *comp = tokens[1];
+                char *jump = tokens[2];
+
+                const char *dv = c_lookup(dest, 1);
+                const char *cv = c_lookup(comp, 0);
+                const char *jv = c_lookup(jump, 2);
+
+                fprintf(output, "%s%s%s%s\n", C_HEAD, cv, dv, jv);
             }
         }
     }
@@ -156,7 +157,6 @@ int main(int argc, char *argv[])
 
     initialize();
     first_pass(file);
-    //t_print();
     second_pass(file);
 
     fclose(file);

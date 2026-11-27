@@ -5,9 +5,11 @@
 void strip_spaces_and_comments(char *s)
 {
     // skip comments
+    // pointer to comment
     char *comment = strstr(s, "//");
     if (comment)
     {
+        // found comment -> replace with empty string
         *comment = '\0';
     }
 
