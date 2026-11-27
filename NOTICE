@@ -1,0 +1,19 @@
+Third-party materials
+
+The following files are part of www.nand2tetris.org and the book
+"The Elements of Computing Systems" by Noam Nisan and Shimon Schocken
+(MIT Press). They are included here as test fixtures and are not covered
+by the MIT license in LICENSE:
+
+  n2tetris-tests/add/Add.asm
+  n2tetris-tests/max/Max.asm
+  n2tetris-tests/max/MaxL.asm
+  n2tetris-tests/pong/Pong.asm
+  n2tetris-tests/pong/PongL.asm
+  n2tetris-tests/rect/Rect.asm
+  n2tetris-tests/rect/RectL.asm
+  tests/max-test.asm  (derived from the course's Max.asm)
+
+Dynamic table module is implemented based on tutorial from https://www.geeksforgeeks.org/dsa/implementation-on-map-or-dictionary-data-structure-in-c/
+
+Everything else in this repository is original work.

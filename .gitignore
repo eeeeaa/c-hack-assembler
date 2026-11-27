@@ -1,3 +1,10 @@
 build/*
 output/*
 n2tetris-tests/output/*
+
+# macOS
+.DS_Store
+
+# build artefacts
+*.o
+*.dSYM/
